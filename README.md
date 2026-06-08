@@ -10,7 +10,23 @@ A Gerrit & JGit maintainer's ranked assessment of four approaches to bridging Ge
 
 ## The Problem
 
-JGit master has moved to **jakarta.servlet 6.1.0** on Jetty 12. Gerrit `stable-3.13` still runs on **javax.servlet 4.0.1**, and won't migrate until it ages out of support.
+JGit master has moved to **jakarta.servlet 6.1.0** on Jetty 12, because of the alignment with the Eclipse project lifecycle.
+Gerrit `stable-3.13` still runs on **javax.servlet 4.0.1**, and is subject to Google's policy on global dependencies updates.
+
+The above situation is caused by the fact that JGit and Gerrit belong to two different organizations
+with different policies:
+
+- **JGit** is part of the Eclipse Foundation and the global release cycle.
+  Matthias Sohn is the project leader and can approve the dependency updates.
+  Google is one of the committers, but not the owner of the project.
+
+- **Gerrit** is a project that belongs to Google and follows the company-wide dependencies system.
+  Google has veto on the dependency updates that are used in the *.googlesource.com fork of Gerrit
+  and requires a *Library-Compliance* vote from a Googler.
+
+> **NOTE**: This document refers to the Servlet upgrade issue; however, the same problem also exists for many
+> other dependencies that are misaligned between JGit and Gerrit, and for future security or maintenance
+> dependency bumps.
 
 To support consumers that haven't yet migrated, JGit maintains a special `servlet-4` branch that tracks master but holds back the **jakarta.servlet namespace move** — using **Jetty 12's ee8 compatibility layer** to keep its HTTP/LFS modules (`org.eclipse.jgit.http.server`, `http.test`, `junit.http`, `lfs.server`, `lfs.server.test`) on the `javax.servlet 4` API surface Gerrit needs to compile.
 

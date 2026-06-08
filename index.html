@@ -725,9 +725,9 @@
         <p class="subtitle">Why this question exists in the first place.</p>
       </div>
       <div class="context">
-        <p>JGit master has moved to <strong>jakarta.servlet 6.1.0</strong> and <strong>Jetty 12.x</strong>. Gerrit <code>stable-3.13</code> still runs on <strong>javax.servlet 4.0.1</strong> and <strong>Jetty 9.x</strong>, and won't migrate until it ages out of support.</p>
+        <p>JGit master has moved to <strong>jakarta.servlet 6.1.0</strong> on Jetty 12. Gerrit <code>stable-3.13</code> still runs on <strong>javax.servlet 4.0.1</strong>, and won't migrate until it ages out of support.</p>
 
-        <p>To support consumers that haven't yet migrated, JGit maintains a special <code>servlet-4</code> branch that tracks master but holds back the jakarta.servlet namespace move and the Jetty 12 bumps — keeping JGit's HTTP/LFS modules (<code>org.eclipse.jgit.http.server</code>, <code>http.test</code>, <code>junit.http</code>, <code>lfs.server</code>, <code>lfs.server.test</code>) on the javax.servlet 4 / Jetty 9.x stack Gerrit needs to compile.</p>
+        <p>To support consumers that haven't yet migrated, JGit maintains a special <code>servlet-4</code> branch that tracks master but holds back the <strong>jakarta.servlet namespace move</strong> — using <strong>Jetty 12's ee8 compatibility layer</strong> to keep its HTTP/LFS modules (<code>org.eclipse.jgit.http.server</code>, <code>http.test</code>, <code>junit.http</code>, <code>lfs.server</code>, <code>lfs.server.test</code>) on the <code>javax.servlet 4</code> API surface Gerrit needs to compile.</p>
 
         <div class="callout">
           <strong>Scope is bounded:</strong> three reverts are the entire set of JGit-side changes needed, and no future additions to the fork are expected.
@@ -735,7 +735,7 @@
 
         <p><strong>Why not consume the <code>servlet-4</code> branch directly?</strong> It's designed exactly for our servlet stack — but it tracks JGit master, which has migrated to <strong>bzlmod</strong>. Gerrit stable-3.13 still uses <strong>WORKSPACE-mode</strong> builds. That single divergence — bzlmod vs WORKSPACE — rules out direct consumption.</p>
 
-        <p><strong>Why <code>stable-7.4</code> + three reverts instead?</strong> stable-7.4 predates JGit's bzlmod migration (still on WORKSPACE, matching Gerrit stable-3.13), so the bzlmod axis requires zero JGit-side work. The three reverts undo the jakarta.servlet / Jetty 12 bumps that stable-7.4 inherits from master — restoring the same javax.servlet 4 / Jetty 9.x stack that the <code>servlet-4</code> branch already provides.</p>
+        <p><strong>Why <code>stable-7.4</code> + three reverts instead?</strong> stable-7.4 predates JGit's bzlmod migration (still on WORKSPACE, matching Gerrit stable-3.13), so the bzlmod axis requires zero JGit-side work. The three reverts undo the jakarta.servlet / Jetty 12 bumps that stable-7.4 inherits from master — restoring the <code>javax.servlet 4</code> API surface that the <code>servlet-4</code> branch already provides via Jetty 12 ee8.</p>
 
         <p>Once stable-3.13 ages out and aligns on the modern stack, the fork branch goes away entirely.</p>
 

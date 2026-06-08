@@ -10,16 +10,16 @@ A Gerrit & JGit maintainer's ranked assessment of four approaches to bridging Ge
 
 ## The Problem
 
-JGit master has moved to **jakarta.servlet 6.1.0** and **Jetty 12.x**. Gerrit `stable-3.13` still runs on **javax.servlet 4.0.1** and **Jetty 9.x**, and won't migrate until it ages out of support.
+JGit master has moved to **jakarta.servlet 6.1.0** on Jetty 12. Gerrit `stable-3.13` still runs on **javax.servlet 4.0.1**, and won't migrate until it ages out of support.
 
-To support consumers that haven't yet migrated, JGit maintains a special `servlet-4` branch that tracks master but holds back the jakarta.servlet namespace move and the Jetty 12 bumps — keeping JGit's HTTP/LFS modules (`org.eclipse.jgit.http.server`, `http.test`, `junit.http`, `lfs.server`, `lfs.server.test`) on the javax.servlet 4 / Jetty 9.x stack Gerrit needs to compile.
+To support consumers that haven't yet migrated, JGit maintains a special `servlet-4` branch that tracks master but holds back the **jakarta.servlet namespace move** — using **Jetty 12's ee8 compatibility layer** to keep its HTTP/LFS modules (`org.eclipse.jgit.http.server`, `http.test`, `junit.http`, `lfs.server`, `lfs.server.test`) on the `javax.servlet 4` API surface Gerrit needs to compile.
 
 > [!NOTE]
 > **Scope is bounded:** three reverts are the entire set of JGit-side changes needed, and no future additions to the fork are expected.
 
 **Why not consume the `servlet-4` branch directly?** It's designed exactly for our servlet stack — but it tracks JGit master, which has migrated to **bzlmod**. Gerrit `stable-3.13` still uses **WORKSPACE-mode** builds. That single divergence — bzlmod vs WORKSPACE — rules out direct consumption.
 
-**Why `stable-7.4` + three reverts instead?** `stable-7.4` predates JGit's bzlmod migration (still on WORKSPACE, matching Gerrit `stable-3.13`), so the bzlmod axis requires zero JGit-side work. The three reverts undo the jakarta.servlet / Jetty 12 bumps that `stable-7.4` inherits from master — restoring the same javax.servlet 4 / Jetty 9.x stack that the `servlet-4` branch already provides.
+**Why `stable-7.4` + three reverts instead?** `stable-7.4` predates JGit's bzlmod migration (still on WORKSPACE, matching Gerrit `stable-3.13`), so the bzlmod axis requires zero JGit-side work. The three reverts undo the jakarta.servlet / Jetty 12 bumps that `stable-7.4` inherits from master — restoring the `javax.servlet 4` API surface that the `servlet-4` branch already provides via Jetty 12 ee8.
 
 Once `stable-3.13` ages out and aligns on the modern stack, the fork branch goes away entirely.
 

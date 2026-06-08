@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b13ed0a1_b6b6d743",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000177
+      },
+      "writtenOn": "2026-06-08T11:06:04Z",
+      "side": 1,
+      "message": "Can you also update `index.html`? This is the actual source that is used to gh-pages. Or we merge it as-is and I will sync the both files.",
+      "revId": "45bc68aee43c70ac91ec10be08559a1ed7d0f8c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
